@@ -1,6 +1,7 @@
 package Finance::SEC::EdgarData;
 use XML::Bare;
-use Mojo::UserAgent;
+use LWP::UserAgent;
+use Carp;
 use strict;
 use warnings;
 use v5.10;
@@ -36,7 +37,12 @@ sub parse_rss {
 
 sub get_rss {
   my $url = get_rss_url(@_);
-  my $d = $ua->get($url)->result->body;
+  my $res = $ua->get($url);
+  if (!($res->is_success)) {
+    say STDERR $res->content;
+    return 0;
+  }
+  my $d = $res->content;
   my $rss = parse_rss($d);
   return $rss;
 }
@@ -64,7 +70,9 @@ sub get_filing_url {
 
 sub get_xbrl_url {
   my $link = shift;
-  my $d = $ua->get($link)->result->body;
+  my $res = $ua->get($link);
+  return 0 unless $res->is_success;
+  my $d = $res->content;
   my $found = 0;
   while ($d =~ /<table.*?>(.*?)<\/table>/isg) {
     if ($1) {
@@ -91,8 +99,10 @@ sub get_filing {
   my ($sym, $t, $date) = @_;
   my $filing_url = get_filing_url($sym, $t, $date);
   my $xbrl_url = get_xbrl_url($filing_url);
-  my $data = $ua->get($xbrl_url)->result->body;
-  my $m = XML::Bare->new(text => $data);
+  my $res = $ua->get($xbrl_url);
+  return 0 unless $res->is_success;
+  my $d = $res->content;
+  my $m = XML::Bare->new(text => $d);
   my $root = $m->parse();
   return $root;
 }

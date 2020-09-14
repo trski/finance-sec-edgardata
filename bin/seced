@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 use Getopt::Std;
-use JSON::XS qw(encode_json);
+use JSON qw(encode_json);
 use Finance::SEC::EdgarData qw(
   get_filing_dates
   get_filing
