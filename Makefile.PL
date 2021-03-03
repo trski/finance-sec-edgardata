@@ -16,7 +16,7 @@ WriteMakefile(
         'Test::More' => 0,
         'XML::Bare' => 0.53,
         'JSON::XS' => 4.02,
-        'Mojo::UserAgent' => 8.26
+        'Mojolicious' => 8.26
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Finance-SEC-EdgarData-*' },
