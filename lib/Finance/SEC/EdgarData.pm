@@ -21,6 +21,8 @@ our $VERSION = '0.01';
 my $BASE_URL = 'https://www.sec.gov';
 my $RSS_URL = "$BASE_URL/cgi-bin/browse-edgar?action=getcompany&CIK=%s&type=%s&dateb=&owner=exclude&count=500&output=atom";
 my $ua = LWP::UserAgent->new;
+my $agent = "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:24.0) Gecko/20100101 Firefox/24.0";
+$ua->agent($agent);
 
 sub get_rss_url {
   my ($sym, $t) = @_;
